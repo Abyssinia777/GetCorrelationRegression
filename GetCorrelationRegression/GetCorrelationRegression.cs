@@ -12,7 +12,7 @@ namespace cAlgo.Robots
     [Robot(TimeZone = TimeZones.UTC, AccessRights = AccessRights.FullAccess)]
     public class GetCorrelationRegression : Robot
     {
-        [Parameter("CSV出力パス", DefaultValue = 0.0)]
+        [Parameter("CSV出力パス", DefaultValue = "c:\\tmp")]
         public string para_filePath { get; set; }
 
         private TimeFrame[] timeFrames = 
@@ -51,9 +51,20 @@ namespace cAlgo.Robots
 
                     foreach (var timeFrame in timeFrames)
                     {
-                        var baseSymbolClose = MarketData.GetBars(timeFrame, baseSymbol).ClosePrices;
-                        var subSymbolClose = MarketData.GetBars(timeFrame, subSymbol).ClosePrices;
-                        sb.Append(ComputeCoeff(baseSymbolClose, subSymbolClose));
+                        //メインシンボルとサブシンボルのバーの数を少ないほうに合わせる
+                        int barCount = System.Math.Min(MarketData.GetBars(timeFrame, baseSymbol).Count, MarketData.GetBars(timeFrame, subSymbol).Count);
+
+                        //メインシンボルとサブシンボルの終値のリストを作成する
+                        var closePriceOfBaseSymbol = new List<double>();
+                        var closePriceOfSubSymbol = new List<double>();
+
+                        for (int i = 0; i < barCount; i++)
+                        {
+                            closePriceOfBaseSymbol.Add(MarketData.GetBars(timeFrame, baseSymbol).ClosePrices.Last(i));
+                            closePriceOfSubSymbol.Add(MarketData.GetBars(timeFrame, subSymbol).ClosePrices.Last(i));
+                        }
+                        //相関係数を算出する
+                        sb.Append(ComputeCoeff(closePriceOfBaseSymbol, closePriceOfSubSymbol));
                         sb.Append(",");
                     }
                     WriteCsvFile(sb.ToString());
@@ -68,7 +79,7 @@ namespace cAlgo.Robots
         /// <param name="values1">通貨ペア1</param>
         /// <param name="values2">通貨ペア2</param>
         /// <returns></returns>
-        public double ComputeCoeff(DataSeries values1, DataSeries values2)
+        public double ComputeCoeff(List<double> values1, List<double> values2)
         {
             /*
             if (values1.Count != values2.Count)
