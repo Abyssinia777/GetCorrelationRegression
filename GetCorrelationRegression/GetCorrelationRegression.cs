@@ -15,21 +15,24 @@ namespace cAlgo.Robots
         [Parameter("CSV出力パス", DefaultValue = "c:\\tmp")]
         public string para_filePath { get; set; }
 
-        private TimeFrame[] timeFrames = 
+        [Parameter("遡及日数", DefaultValue = 365)]
+        public int para_retroactiveDates { get; set; }
+
+        private TimeFrame[] timeFrames =    
         {
             TimeFrame.Weekly,
             TimeFrame.Daily,
             TimeFrame.Hour4,
             TimeFrame.Hour,
             TimeFrame.Minute30,
-            TimeFrame.Minute15,
+            TimeFrame.Minute10,
             TimeFrame.Minute5,
             TimeFrame.Minute
         };
 
         string fileFullPath;
         private string fileName = DateTime.Now.ToString("yyyyMMddHHmmss_") + "GetCorrelationRegression.csv";
-        private const string csvHeader = "通貨ペア1" + "," + "通貨ペア2" + "," + "Weekly" + "," + "Daily" + "," + "Hour4" + "," + "Hour1" + "," + "Minute30" + "," + "Minute15" + "," + "Minuts5" + "," + "Minuts1";
+        private const string csvHeader = "通貨ペア1" + "," + "通貨ペア2" + "," + "Weekly" + "," + "Daily" + "," + "Hour4" + "," + "Hour1" + "," + "Minute30" + "," + "Minute10" + "," + "Minuts5" + "," + "Minuts1";
         protected override void OnStart()
         {
             Print("開始");

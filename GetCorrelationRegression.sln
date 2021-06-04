@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetCorrelationRegression", "GetCorrelationRegression\GetCorrelationRegression.csproj", "{C01DF7D1-F31D-492D-874B-EFD6FB41F0CB}"
@@ -18,3 +18,4 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
+
